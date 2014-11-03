@@ -1,3 +1,3 @@
 A shell script to set up sites for Apache (and in the future NGINX as well.)
 
-This is a work in progress, and many of the decisions made are solely based on what works for my particular set up. Feel free to use it _as-is_ or modify it to work with your set up.
+This is a work in progress, and many of the decisions made are solely based on what works for my particular set up. Feel free to use it as-is or modify it to work with your set up.
