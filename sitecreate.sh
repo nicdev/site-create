@@ -18,7 +18,7 @@ fi
 # Check whether the directory exists or create it
 if [ ! -e "$root_location" ]
 then
-	mkdir -p $root_location 2&>1 >/dev/null
+	mkdir -p $root_location > /dev/null 2>&1
 
 	if [ $? != 0 ]
 	then
@@ -34,16 +34,30 @@ fi
 # @TODO Working on Apache first, NGINX to follow 
 
 # Create basic Apache site config file
-config_file=$(printf "<VirtualHost *:80>\n \
-                        DocumentRoot \"%s\" \n \
-                        ServerName %s \n \
-                        ServerAlias %s \n \
-                        DirectoryIndex index.php index.html \n \
-                </VirtualHost>" "$root_location" "$domain" "www.$domain") 
+# site_config=$(printf "<VirtualHost *:80>\n \
+#                         DocumentRoot \"%s\" \n \
+#                         ServerName %s \n \
+#                         ServerAlias %s \n \
+#                         DirectoryIndex index.php index.html \n \
+#                 </VirtualHost>" "$root_location" "$domain" "www.$domain") 
 
 #@TODO add error checking, no overwrite, etc
 conf_file=$domain.conf
-echo -e $config_file > /etc/apache2/$conf_file
+# echo $site_config;
+# print $site_config > /etc/apache2/sites-available/$conf_file
+
+echo "<VirtualHost *:80>" > /etc/apache2/sites-available/$conf_file
+echo "DocumentRoot $root_location" >> /etc/apache2/sites-available/$conf_file
+echo "ServerName $domain" >> /etc/apache2/sites-available/$conf_file
+echo "ServerAlias www.$domain" >> /etc/apache2/sites-available/$conf_file
+echo "DirectoryIndex index.php index.html" >> /etc/apache2/sites-available/$conf_file
+echo "</VirtualHost>" >> /etc/apache2/sites-available/$conf_file
+
+a2ensite $domain.conf
+
+service apache2 reload
+
+echo "Done and done."
 
 # if [ $? != 0 ]
 # then
